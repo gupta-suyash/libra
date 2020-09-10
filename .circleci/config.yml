@@ -1028,44 +1028,7 @@ workflows:
 
   pull-request-workflow:
     jobs:
-      - lint-docker:
-          filters: *filter-only-prs-dependabot
-      - prefetch-crates:
-          filters: *filter-only-prs-dependabot
-      - lint:
-          requires:
-            - prefetch-crates
-      - build-dev:
-          requires:
-            - prefetch-crates
-      - run-e2e-test:
-          requires:
-            - prefetch-crates
-      - run-unit-test:
-          requires:
-            - prefetch-crates
-      - run-crypto-unit-test:
-          requires:
-            - prefetch-crates
-      - build-benchmark:
-          requires:
-            - prefetch-crates
-      - build-docs:
-          requires:
-            - lint
-      - docker-ci-build:
-          target-image: circleci
-          filters: *filter-only-prs-dependabot
-      - docker-ci-build:
-          target-image: centos
-          filters: *filter-only-prs-dependabot
-      - docker-ci-build:
-          #sccache fails to execute in alpine.
-          target-image: alpine
-          filters: *filter-only-prs-dependabot
-      - docker-ci-build:
-          target-image: arch
-          filters: *filter-only-prs-dependabot
+      - prefetch-crates
 
   scheduled-workflow:
     triggers:

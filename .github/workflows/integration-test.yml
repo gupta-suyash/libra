@@ -21,7 +21,10 @@ jobs:
       - name: setup_env
         run: |
           HEAD_GIT_REV=$(git rev-parse --short=8 HEAD)
-          echo "::set-env name=HEAD_GIT_REV::$HEAD_GIT_REV"
+          # TODO clean up after canary
+          #echo "::set-env name=HEAD_GIT_REV::$HEAD_GIT_REV"
+          echo "Override env to pretend HEAD is ef12047 from master"
+          echo "::set-env name=HEAD_GIT_REV::ef12047"
       - name: find_last_tested_commit
         # Find the commit hash of the last tested tag in ECR
         env:
@@ -49,6 +52,9 @@ jobs:
               img_rev=$GIT_REV
             fi
           fi
+          echo $img_rev
+          echo "last tested git rev is $img_rev. I am going to override it to 1a8fbea, which is one of the parent commitsof HEAD from master."
+          img_rev=1a8fbea
           echo $img_rev
           echo "::set-env name=LAST_TESTED_GIT_REV::$img_rev"
       - name: Check trigger - run test if the image hasn't ben tested
@@ -124,5 +130,5 @@ jobs:
           }
 
           for repo in repos; do
-            retag_image $repo "master_$HEAD_GIT_REV" "master"
+            retag_image $repo "master_$HEAD_GIT_REV" "sausage"
           done
